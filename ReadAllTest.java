@@ -62,7 +62,7 @@ public class ReadAllTest extends Configured {
       System.exit(1);
     }
     String hdfsUri = args[0];
-    String fileToRead = args[1];
+    String fileName = args[1];
     final Configuration conf = new Configuration();
     FileSystem fs = FileSystem.get(new URI(hdfsUri), conf);
 
@@ -70,20 +70,20 @@ public class ReadAllTest extends Configured {
     for (int i = 0; i < ORIGINAL.length; i++) {
       ORIGINAL[i] = (byte)i;
     }
-    FSDataOutputStream out = fs.create(new Path("/b"), (short)1);
+    FSDataOutputStream out = fs.create(new Path(fileName), (short)1);
     try {
       out.write(ORIGINAL);
     } finally {
       out.close();
     }
     byte input[] = new byte[ORIGINAL.length];
-    FSDataInputStream in = fs.open(new Path("/b"));
+    FSDataInputStream in = fs.open(new Path(fileName));
     try {
       in.readFully(input);
     } finally {
       in.close();
     }
-    in = fs.open(new Path("/b"));
+    in = fs.open(new Path(fileName));
     try {
       in.readFully(0, input);
     } finally {
